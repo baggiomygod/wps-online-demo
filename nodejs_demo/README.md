@@ -1,4 +1,5 @@
 
+
 # wpsweb-demo运行说明(当前版本1.0.3)
 ***1.设置配置文件config/index.js***
 >	port:     demo服务端口(如: "19999")
@@ -21,7 +22,7 @@
 >   安装node, node版本>=8
 >
 >	cd wpsweb-demo/nodejs_demo
->
+>   config/index.example.js 填写配置并改为index.js
 >	npm install
 >
 >	npm run start
