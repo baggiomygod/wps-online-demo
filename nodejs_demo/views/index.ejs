@@ -1,0 +1,17 @@
+<html>
+  <head>
+    <title>文件列表</title>
+    <!-- <link rel="stylesheet" href="/public/css/news.css" /> -->
+  </head>
+  <body>
+    <ul class="">
+      <% files.forEach(function(file){ %>
+        <li class="item">
+            <a href="/view?file=<%= encodeURIComponent(file) %>"><%= file %></a>
+          </li>
+      <% }); %>
+    </ul>
+  </body>
+  <script type="text/javascript">
+  </script>
+</html>
