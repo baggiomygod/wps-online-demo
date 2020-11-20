@@ -27,9 +27,24 @@
     iframe {
       flex: 1;
     }
+    #root{
+      padding: 40px;
+      background-color: #e2e2e2;
+      height: 100%;
+    }
+    h1{
+      text-align: center;
+    }
+    #wps-container{
+      width: 80%;
+      margin: 0 auto;
+      height: 90%;
+    }
   </style>
-  <script src="js/jwps.js"></script>
+  <!-- <script src="js/jwps.js"></script> -->
+  <script src="js/jwps1.1.5.js"></script>
   <script type="text/javascript">
+  // var WebOfficeSDK = require('./libs/web-office-sdk.cjs.js')
     // 支持 HTTPS
     // 注意：如果通过postMessage来设置token，请在url参数加上_w_hastoken=1
     window.onload = () => {
@@ -49,8 +64,9 @@
           const data = await res.json()
           expiresIn = data.expires_in
 
-          wps = WPS.config({
-            mount: document.querySelector('body'),
+          wps = WebOfficeSDK.config({
+            mount: document.querySelector('#wps-container'),
+            mode: 'normal',
             // 文字
             wpsUrl: data.wpsUrl,
             headers: {
@@ -90,6 +106,28 @@
             const data = await res.json()
             wps.setToken({token: data.token})
           }, (expiresIn - 60) * 1000)
+
+          const replactRes = await fetch('/getReplaceTexts')
+          const replceData = await replactRes.json()
+
+          await wps.ready()
+          const isSuccess = await wps.WordApplication()
+              .ActiveDocument.ReplaceText([
+                { key: '{{title}}', value: replceData.title, options: { isWildcardMatched: true } },
+                { key: '{{name}}', value: replceData.name, options: { isWildcardMatched: true } },
+                { key: '{{time}}', value: replceData.time, options: { isWildcardMatched: true } },
+            ])
+
+          // 书签
+          const bookmarks = await wps.WordApplication().ActiveDocument.Bookmarks.Json()
+          console.log('所有书签：', bookmarks)
+          let isReplaceSuccess = false
+        // 替换书签
+            isReplaceSuccess = await wps.WordApplication().ActiveDocument.ReplaceBookmark([
+            {name: 'Bookmark4：title', type: 'text', value: replceData.title},
+            {name: 'Bookmark2：name', type: 'text', value: replceData.name},
+            {name: 'Bookmark3：time', type: 'text', value: replceData.time},
+              ])
         } else {
           document.body.innerHTML = res.statusText
         }
@@ -111,7 +149,10 @@
 </head>
 
 <body>
-
+  <div id="root">
+    <h1>招必得WPS在线编辑</h1>
+    <div id="wps-container"></div>
+  </div>
 </body>
 
 </html>

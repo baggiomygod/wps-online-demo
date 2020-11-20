@@ -6,7 +6,7 @@ const mockRouter = require('./mock')
 const multer  = require('multer')
 
 const upload = multer()
-const { getListFileHandler, getUrlAndTokenHandler, downloadFile, getCreateFileUrlAndToken } = require('../controller')
+const { getListFileHandler, getUrlAndTokenHandler, downloadFile, getCreateFileUrlAndToken, getReplaceTextsHandler } = require('../controller')
 const { asyncMiddleware } = require('../util')
 const { validateMiddleware } = require('../middleware')
 
@@ -20,10 +20,13 @@ router.get('/', asyncMiddleware(function(req, res, next) {
 router.get('/view.html', function(req, res, next) {
   res.sendFile(path.join(global.gConfig.VIEW_DIR, 'view.html'));
 });
+router.get('/view-tpl.html', function(req, res, next) {
+  res.sendFile(path.join(global.gConfig.VIEW_DIR, 'view-tpl.html'));
+});
 
 
 router.get("/getListFile", getListFileHandler)
-
+router.get('/getReplaceTexts', getReplaceTextsHandler)
 // test
 router.post('/test', upload.array(), (req, res) => {
   console.debug(global.gColor.blue, '------------------test--------------------', req.body)

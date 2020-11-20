@@ -1,6 +1,9 @@
 const { getListFileHandler } = require('./getListFile')
 const { getUrlAndTokenHandler } = require('./getUrlAndToken')
 const { getCreateFileUrlAndToken } = require('./getCreateFileUrlAndToken')
+const { getReplaceTextsHandler } = require('./getReplaceTextsHandler')
+  
+
 const { 
   getFileInfo, 
   postFileOnline, 
@@ -16,6 +19,7 @@ const {
 
 module.exports = {
   getListFileHandler,
+  getReplaceTextsHandler,
   getUrlAndTokenHandler,
   getFileInfo,
   postFileOnline,
